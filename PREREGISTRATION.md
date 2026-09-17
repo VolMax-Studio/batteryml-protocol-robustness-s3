@@ -273,7 +273,43 @@ Every legitimate minimum-cost protocol-disjoint split $B_k$ must have an interse
 
 ---
 
-## 4. Execution Matrix & Two Positive Controls
+## 4. Governing Sampler Algorithm & Pre-Commitments
+
+### Seed Stream Algorithm
+The sampler pseudo-random stream is strictly defined and evaluated over the seed digest:
+```text
+seed_text   = "batteryml-s3-sampler|dbb142e77901cb5ee245c98af3b42e3d407c32a5|96695e534718733469ba108ee3c1372e29351710235d5b47020f6bd9ae2ce722"
+seed_digest = SHA256(UTF8(seed_text))
+block_i     = SHA256(seed_digest || uint64_be(i))
+x           = uint256_be(block_i)
+```
+*Implementation requirement*: `SHA256` operates on `seed_digest || uint64_be(i)` (32 bytes + 8 bytes = 40 bytes), NOT directly on `seed_text || uint64_be(i)`.
+
+### Uniform Sampling Without Replacement
+- Population size: $N = 185,470$ (derived by excluding S2.1 reference rank `169301` from the $185,471$ minimum-cost space).
+- Rejection limit: $\lfloor 2^{256} / N \rfloor \times N$. Values $x \ge \text{limit}$ are rejected (modulo-bias rejection).
+- Sampled rank mapping: $r = x \pmod N$; if $r \ge 169301$, $r \leftarrow r + 1$.
+- Duplicates and hits on $169301$ are rejected.
+- Observed counter consumption: exactly 64 blocks consumed ($i=0\dots 63$) with **0 modulo-bias rejections, 0 duplicate rejections, and 0 reference rank hits**.
+
+### Governing Pre-Commitment Hashes (Ratified under Operator [L3])
+1. **Draw Order Rank Hash** (decimal rank per line, trailing LF):
+   `sha256(draw_order_decimal_LF) = 1d84b7bf864945a26ec0a5d2feec754b6ed6b4bf50b9f4e5b02bc45720b0ff02`
+2. **Ascending Order Rank Hash** (decimal rank per line, trailing LF):
+   `sha256(ascending_decimal_LF) = 0f2de17c98e615023ef5966630fd93962382c4566c36a43b0d386bd0a8dbfc40`
+3. **Governing Test Membership Commitment** (`s3-test-membership-commitment.csv`):
+   - Schema: `draw_index_decimal,rank_decimal,sorted_test_cell_ids_pipe_LF` (42 test cells sorted by unsigned UTF-8 bytes joined by `|`, trailing `\n`).
+   - Exact length: `16,176` bytes.
+   - SHA-256: `53a157ecd49c0a238cd5028c6ab840431a7ecb600b067290ee51645820cb5ada`
+4. **Governing Split Manifest** (`s3-split-manifest.csv`):
+   - 5,313 lines, 108,942 bytes.
+   - SHA-256: `cf9c269a93053e64ecf9200e0ee704fb0c32d2787f721fc24f0cb711cdc33895`
+
+Any discrepancy on any of these four hashes at preflight or verification triggers an immediate hard stop (`RANK_HASH_MISMATCH`, `MEMBERSHIP_COMMITMENT_MISMATCH`, or `SAMPLER_REGENERATION_MISMATCH`).
+
+---
+
+## 5. Execution Matrix & Two Positive Controls
 
 The execution matrix consists of $4 \times (K + 2) = 264$ model fits:
 
@@ -299,7 +335,7 @@ The execution matrix consists of $4 \times (K + 2) = 264$ model fits:
 
 ---
 
-## 5. Estimands & Diagnostic Metrics
+## 6. Estimands & Diagnostic Metrics
 
 ### 1. Primary Operational Estimand ($D^{RMSE}_{m,k}$)
 For model $m$ and split $k$:
@@ -337,7 +373,7 @@ Measures the vulnerability of aggregate metrics to single extreme outlier additi
 
 ---
 
-## 6. Adjudication Logic & Priority Cascade
+## 7. Adjudication Logic & Priority Cascade
 
 For each ranking model $m \in \{\text{variance}, \text{ridge}, \text{xgb}\}$ across $K$ splits:
 - $p^{abs}_m = \frac{1}{K} \sum_k \mathbf{1}(|D^{RMSE}_{m,k}| \ge 0.10)$
@@ -366,7 +402,7 @@ For each ranking model $m \in \{\text{variance}, \text{ridge}, \text{xgb}\}$ acr
 
 ---
 
-## 7. Compute Budget & Mechanical $K=64$ Derivation
+## 8. Compute Budget & Mechanical $K=64$ Derivation
 
 The compute budget formula derives $K$ strictly from the platform session limit:
 - Official Kaggle Notebook session limit: $43,200\text{ s}$ ($12\text{ hours}$).
@@ -379,7 +415,7 @@ The compute budget formula derives $K$ strictly from the platform session limit:
 
 ---
 
-## 8. Hard Stop Rules
+## 9. Hard Stop Rules
 
 | Phase | Trigger / Condition | Terminal Disposition |
 | :--- | :--- | :--- |
@@ -404,7 +440,7 @@ The compute budget formula derives $K$ strictly from the platform session limit:
 
 ---
 
-## 9. Strict Interpretation Boundary
+## 10. Strict Interpretation Boundary
 
 1. **Split quantiles describe empirical partition sensitivity, not inferential confidence intervals.**
 2. **Splits share a substantial fraction of cells and are not independent draws.**

@@ -1,6 +1,7 @@
 {
   "accessed_at_utc": "2026-09-17T19:04:12Z",
   "authoritative_platform_value_required": true,
+  "browser_user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36",
   "documentation_url": "https://www.kaggle.com/docs/notebooks",
   "governing_clause": "The 43,200-second limit is taken from Kaggle's official Notebook-session documentation. Any stricter batch-execution limit is treated as PLATFORM_TIME_LIMIT, eligible for Attempt 2 under the frozen attempt policy.",
   "infer_limit_from_runtime_survival": false,
@@ -34,5 +35,10 @@
   },
   "session_limit_seconds": 43200,
   "session_limit_source": "OFFICIAL_KAGGLE_DOCUMENTATION",
-  "status": "FROZEN_SESSION_LIMIT_MEASURED"
+  "status": "FROZEN_SESSION_LIMIT_DOCUMENTED",
+  "wayback_archive_audit": {
+    "cdx_status": "HTTP_200_EMPTY_BODY_SPA_SHELL",
+    "verified": false,
+    "note": "Wayback captures Kaggle SPA initial HTML shell without client-rendered JS body; custody relies on client-rendered innerText hash and explicit documentation URL."
+  }
 }
