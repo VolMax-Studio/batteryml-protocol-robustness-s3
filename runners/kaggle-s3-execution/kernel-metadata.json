@@ -1,0 +1,17 @@
+{
+  "id": "volmax/batteryml-protocol-robustness-s3-run",
+  "title": "BatteryML Protocol Robustness S3 Run",
+  "code_file": "execute.py",
+  "language": "python",
+  "kernel_type": "script",
+  "is_private": true,
+  "enable_gpu": false,
+  "enable_internet": false,
+  "dataset_sources": [
+    "rickandjoe/mit-battery-degradation-dataset",
+    "volmax/batteryml-protocol-robustness-s3-controls"
+  ],
+  "competition_sources": [],
+  "kernel_sources": [],
+  "model_sources": []
+}
