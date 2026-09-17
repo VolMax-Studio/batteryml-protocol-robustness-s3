@@ -36,8 +36,8 @@ S3 advances from single-point evaluation to a **distributional robustness map**:
 | [`s3-split-manifest.csv`](s3-split-manifest.csv) | Generated 64-split manifest | 5313 lines, 108942 B | `cf9c269a93053e64ecf9200e0ee704fb0c32d2787f721fc24f0cb711cdc33895` |
 | [`s3-test-membership-commitment.csv`](s3-test-membership-commitment.csv) | Test membership pre-commitment | 64 rows, 16176 B | `53a157ecd49c0a238cd5028c6ab840431a7ecb600b067290ee51645820cb5ada` |
 | [`s3-sampler-ranks.json`](s3-sampler-ranks.json) | The 64 unranked sampled ranks | 64 ranks | *Derived from seed* |
-| [`receipts/session-limit-receipt.json`](receipts/session-limit-receipt.json) | Kaggle docs limit receipt & $K=64$ derivation | 2243 B | *Recorded* |
-| [`receipts/kaggle-docs-notebooks-rendered-snapshot.txt`](receipts/kaggle-docs-notebooks-rendered-snapshot.txt) | Rendered innerText snapshot of Kaggle docs | 37573 chars, 37771 B | `d3934243cd66f8f2c37606a5afd967cfdddc1fe9ce081472b1e4b68f4acaab78` |
+| [`receipts/session-limit-receipt.json`](receipts/session-limit-receipt.json) | Kaggle docs limit receipt & $K=64$ derivation | 2245 B | *Recorded* |
+| [`receipts/kaggle-notebooks-session-limit-innertext.txt`](receipts/kaggle-notebooks-session-limit-innertext.txt) | Rendered innerText snapshot of Kaggle docs | 37573 chars, 37771 B | `d3934243cd66f8f2c37606a5afd967cfdddc1fe9ce081472b1e4b68f4acaab78` |
 | [`s3_sampler.py`](s3_sampler.py) | Standalone DP sampler, unranker, & invariant verifier | 321 lines | *Deterministic* |
 | [`s3_adjudication.py`](s3_adjudication.py) | Pure adjudication engine & metric calculation | 200 lines | *Deterministic* |
 
