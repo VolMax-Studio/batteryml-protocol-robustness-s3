@@ -1,0 +1,13 @@
+status=RATIFIED
+instance=batteryml-protocol-robustness-s3
+governing_scientific_commit=0958e89a0e994ed9923da26e04e1f4bfb956ab7f
+implementation_commit=305afe128c9c089b2d4ab62bd5507a57c003f2c8
+prereg_sha256=5c39c1a31fd67299f62828f2ab0b48e982f159b74532ae7b29140ff96fce1350
+driver_sha256=e2d6f83be4139ff99b23be1b61ce0e22b208b5b742c618899761077402e49b36
+runner_sha256=0ad551152d8fa86b1052052a2fe0ab624ae2cb3cace9f114ddf6b440738cbbcd
+split_manifest_sha256=cf9c269a93053e64ecf9200e0ee704fb0c32d2787f721fc24f0cb711cdc33895
+membership_commitment_sha256=53a157ecd49c0a238cd5028c6ab840431a7ecb600b067290ee51645820cb5ada
+operator=Ivan Nestorov, Operator / Final Ratifier
+authorized_at=2026-09-17T23:33:31+02:00
+operator_verbatim_statement=OPERATOR [L3] SCIENTIFIC EXECUTION AUTHORIZATION | I reaffirm the final preregistration freeze for `batteryml-protocol-robustness-s3` at governing scientific commit: 0958e89a0e994ed9923da26e04e1f4bfb956ab7f | I authorize scientific execution using the reviewed implementation at: 305afe128c9c089b2d4ab62bd5507a57c003f2c8 | Authorized implementation hashes: * scientific driver: e2d6f83be4139ff99b23be1b61ce0e22b208b5b742c618899761077402e49b36 * Kaggle runner: 0ad551152d8fa86b1052052a2fe0ab624ae2cb3cace9f114ddf6b440738cbbcd | Execution is authorized only under the frozen S3 v4 preregistration and frozen attempt policy. No change to K=64, sampler, split membership, models, thresholds, estimands, controls, adjudication rules, or attempt semantics is authorized. | Any Attempt 2 requires separate Operator ratification and must satisfy the frozen allowed failure classes. | This authorization permits creation of the execution receipt, publication/binding of the control dataset, and dispatch of Attempt 1 after all preflight identity checks pass.
+operator_statement_location=antigravity-conversation-15abadc7-f175-429d-ba47-9d1ff85d1b74

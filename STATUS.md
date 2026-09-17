@@ -1,10 +1,11 @@
 # S3 Study Status Ledger
 
 - **Instance**: `batteryml-protocol-robustness-s3`
-- **Current State**: `IMPLEMENTATION_V1_PACKAGED`
+- **Current State**: `EXECUTION_ATTEMPT_1_DISPATCHED`
 - **Governing Frozen Science Commit**: `0958e89a0e994ed9923da26e04e1f4bfb956ab7f` (RATIFIED / IMMUTABLE)
+- **Implementation Audit Commit**: `305afe128c9c089b2d4ab62bd5507a57c003f2c8` (CODE-TO-SPEC GATE: PASS)
 - **Preceding Study**: `batteryml-protocol-generalization-s2.1-kaggle` (RATIFIED / CLOSED @ `dbb142e77901cb5ee245c98af3b42e3d407c32a5`)
-- **Scientific Execution Authorized**: `false` (Awaiting Implementation Code-to-Spec Gate)
+- **Scientific Execution Authorized**: `true` (Ratified by Operator [L3] at 2026-09-17T23:33:31+02:00)
 
 ---
 
@@ -21,6 +22,8 @@
 | 2026-09-17 21:38 | `FINAL_FREEZE_GATE_PASSED` | Claude Gate issues VERDICT: PASS; rendered Kaggle docs snapshot committed (37573 chars, d3934243...); batch limit governing clause added to PREREGISTRATION.md; duplicate receipt pruned |
 | 2026-09-17 23:20 | `IMPLEMENTATION_V1_PACKAGED` | Driver, runner, and control dataset assembled. Blindness protection active. All 21 tests pass. Synthetic determinism verified. Premature ratification receipt removed pending operator statement. Submitted for Implementation Code-to-Spec Gate. |
 | 2026-09-17 23:30 | `IMPLEMENTATION_V2_AUDITED` | Code-to-spec blockers resolved: Kaggle owner set to volmax1; receipt uniqueness enforced; deterministic_listing ported to execute.py as post-run binding producer; quantiles aligned to frozen specification (0.05, 0.25, 0.50, 0.75, 0.95 with K>=40 threshold; 0.10 and 0.90 excised); duplicate runner pruned; control dataset manifest recalculated (218 files). 24/24 tests pass. |
+| 2026-09-17 23:35 | `EXECUTION_ATTEMPT_1_DISPATCHED` | Operator [L3] issues verbatim execution authorization statement. Ratification receipt created (receipts/ratification-receipt.txt). Control dataset published to volmax1/batteryml-protocol-robustness-s3-controls (Version 1, 219 files, Manifest SHA 9cab18bd...). Kaggle CPU Kernel pushed to volmax1/batteryml-protocol-robustness-s3-run (Version 1, Kernel ID 134781615). Status: RUNNING. |
+
 
 ---
 
@@ -43,7 +46,8 @@
 - **Kaggle Host Runner (`runners/kaggle-s3-execution/execute.py`)**: `0ad551152d8fa86b1052052a2fe0ab624ae2cb3cace9f114ddf6b440738cbbcd`
 - **Kernel Metadata (`runners/kaggle-s3-execution/kernel-metadata.json`)**: `09fd742addfed2ddcd1b7795259693e60ac005447219a0c17bef1aa94d590648`
 - **Driver & Runner Test Suite (`tests/test_s3_driver_runner.py`)**: `dde199573faaa2952fd9f81b588524ac34f34ad046ed405c2ac73016b4395634`
-- **Control Dataset Manifest SHA-256**: `e92c07c75f0112abfa236e94f16869ec3088ebce8ce920e15581fd7fa7ce510d` (218 files)
+- **Control Dataset Manifest SHA-256**: `9cab18bda989b97984915347a4847aa704fd9d35594ae9dceff7a39cfba3a028` (219 files, with ratification receipt)
 - **Unit Test Suite**: 24/24 tests passed (0.27s)
 - **Determinism Check**: Byte-identical match across all 4 models (`dummy`, `variance`, `ridge`, `xgb`)
-- **Scientific Run Executed**: `false`
+- **Execution Attempt**: Attempt 1 dispatched to Kaggle host (Kernel ID `134781615`, Slug `volmax1/batteryml-protocol-robustness-s3-run`, Status: `RUNNING`)
+
