@@ -186,6 +186,10 @@ PARAMS:
   compute:
     session_limit_source: OFFICIAL_KAGGLE_DOCUMENTATION
     session_limit_seconds: 43200
+    batch_limit_governing_clause: "The 43,200-second limit is taken from Kaggle's official Notebook-session documentation. Any stricter batch-execution limit is treated as PLATFORM_TIME_LIMIT, eligible for Attempt 2 under the frozen attempt policy."
+    session_limit_documentation_hash: d3934243cd66f8f2c37606a5afd967cfdddc1fe9ce081472b1e4b68f4acaab78
+    session_limit_receipt_path: receipts/session-limit-receipt.json
+    session_limit_snapshot_path: receipts/kaggle-docs-notebooks-rendered-snapshot.txt
     usable_session_fraction: 0.80
     available_seconds: 34560
     measured_preprocessing_seconds: 344
@@ -412,6 +416,9 @@ The compute budget formula derives $K$ strictly from the platform session limit:
 - Raw capacity: $K_{raw} = \lfloor \frac{34560 - 1910}{440} \rfloor = 74$.
 - Preregistered cap: $K = \min(64, 74) = \mathbf{64}$.
 - Projected runtime: $29,470\text{ s}$ ($\approx 8.19\text{ h}$); with reserve: $30,070\text{ s}$ ($\approx 8.35\text{ h}$, providing $3.65\text{ h}$ margin).
+
+### Governing Batch Limit Clause
+The 43,200-second limit is taken from Kaggle's official Notebook-session documentation (`receipts/session-limit-receipt.json`, rendered snapshot SHA-256: `d3934243cd66f8f2c37606a5afd967cfdddc1fe9ce081472b1e4b68f4acaab78`, path: `receipts/kaggle-docs-notebooks-rendered-snapshot.txt`). Any stricter batch-execution limit is treated as `PLATFORM_TIME_LIMIT`, eligible for Attempt 2 under the frozen attempt policy.
 
 ---
 
