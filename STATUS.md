@@ -20,6 +20,7 @@
 | 2026-09-17 21:28 | `FREEZE_PATCHES_APPLIED` | Operator [L3] ratifies test membership commitment as governing; seed-digest algorithm literalized in prose; session-limit custody updated to FROZEN_SESSION_LIMIT_DOCUMENTED; 5,103-case exhaustive adjudication truth-table fuzz verified |
 | 2026-09-17 21:38 | `FINAL_FREEZE_GATE_PASSED` | Claude Gate issues VERDICT: PASS; rendered Kaggle docs snapshot committed (37573 chars, d3934243...); batch limit governing clause added to PREREGISTRATION.md; duplicate receipt pruned |
 | 2026-09-17 23:20 | `IMPLEMENTATION_V1_PACKAGED` | Driver, runner, and control dataset assembled. Blindness protection active. All 21 tests pass. Synthetic determinism verified. Premature ratification receipt removed pending operator statement. Submitted for Implementation Code-to-Spec Gate. |
+| 2026-09-17 23:30 | `IMPLEMENTATION_V2_AUDITED` | Code-to-spec blockers resolved: Kaggle owner set to volmax1; receipt uniqueness enforced; deterministic_listing ported to execute.py as post-run binding producer; quantiles aligned to frozen specification (0.05, 0.25, 0.50, 0.75, 0.95 with K>=40 threshold; 0.10 and 0.90 excised); duplicate runner pruned; control dataset manifest recalculated (218 files). 24/24 tests pass. |
 
 ---
 
@@ -38,10 +39,11 @@
 
 ## Implementation Package Manifest
 
-- **Scientific Driver (`runners/s3_kaggle_driver.py`)**: `605731b937d2c8d9dc6793cca1df5e1aa4b406ffd3df5b81295077046a132e8d`
-- **Kaggle Host Runner (`runners/kaggle-s3-execution/execute.py`, `kaggle-s3-execution/execute.py`)**: `d222fa15e945ecd371db6f009d603a0462b45d86af95d6cceb079823ea76cdd5`
-- **Kernel Metadata (`runners/kaggle-s3-execution/kernel-metadata.json`, `kaggle-s3-execution/kernel-metadata.json`)**: `5ce9ba999caea5d8d21226027a08ec733e895c249ca32579dfd2d0b5030e461e`
-- **Control Dataset Manifest SHA-256**: `bb06d3af923e5cdfcfc8b13317c016aa7ec4a10a7a5a2363fd1d4528de6cd2b3` (218 files)
-- **Unit Test Suite**: 21/21 tests passed (0.28s)
+- **Scientific Driver (`runners/s3_kaggle_driver.py`)**: `e2d6f83be4139ff99b23be1b61ce0e22b208b5b742c618899761077402e49b36`
+- **Kaggle Host Runner (`runners/kaggle-s3-execution/execute.py`)**: `0ad551152d8fa86b1052052a2fe0ab624ae2cb3cace9f114ddf6b440738cbbcd`
+- **Kernel Metadata (`runners/kaggle-s3-execution/kernel-metadata.json`)**: `09fd742addfed2ddcd1b7795259693e60ac005447219a0c17bef1aa94d590648`
+- **Driver & Runner Test Suite (`tests/test_s3_driver_runner.py`)**: `dde199573faaa2952fd9f81b588524ac34f34ad046ed405c2ac73016b4395634`
+- **Control Dataset Manifest SHA-256**: `e92c07c75f0112abfa236e94f16869ec3088ebce8ce920e15581fd7fa7ce510d` (218 files)
+- **Unit Test Suite**: 24/24 tests passed (0.27s)
 - **Determinism Check**: Byte-identical match across all 4 models (`dummy`, `variance`, `ridge`, `xgb`)
 - **Scientific Run Executed**: `false`

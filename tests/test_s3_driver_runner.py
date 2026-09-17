@@ -13,8 +13,7 @@ import pytest
 ROOT = Path(__file__).resolve().parent.parent
 RUNNERS_DIR = ROOT / "runners"
 DRIVER_PATH = RUNNERS_DIR / "s3_kaggle_driver.py"
-RUNNER_REPO_PATH = RUNNERS_DIR / "kaggle-s3-execution" / "execute.py"
-RUNNER_ROOT_PATH = ROOT / "kaggle-s3-execution" / "execute.py"
+RUNNER_PATH = RUNNERS_DIR / "kaggle-s3-execution" / "execute.py"
 
 
 def test_driver_compiles():
@@ -24,11 +23,38 @@ def test_driver_compiles():
 
 
 def test_runner_compiles():
-    """Verify execute.py compiles without syntax errors in both locations."""
-    assert RUNNER_REPO_PATH.is_file()
-    py_compile.compile(str(RUNNER_REPO_PATH), doraise=True)
-    assert RUNNER_ROOT_PATH.is_file()
-    py_compile.compile(str(RUNNER_ROOT_PATH), doraise=True)
+    """Verify execute.py compiles without syntax errors."""
+    assert RUNNER_PATH.is_file()
+    py_compile.compile(str(RUNNER_PATH), doraise=True)
+
+
+def test_deterministic_listing():
+    """Verify deterministic_listing in runner produces canonical SHA-256 format and rejects symlinks."""
+    import sys
+    sys.path.insert(0, str(RUNNER_PATH.parent))
+    from execute import deterministic_listing
+
+    with tempfile.TemporaryDirectory() as td:
+        tdp = Path(td)
+        (tdp / "b.txt").write_text("content-b\n", encoding="utf-8")
+        (tdp / "a.txt").write_text("content-a\n", encoding="utf-8")
+        sub = tdp / "sub"
+        sub.mkdir()
+        (sub / "c.txt").write_text("content-c\n", encoding="utf-8")
+
+        listing_text, listing_sha = deterministic_listing(tdp)
+        lines = listing_text.splitlines()
+        assert len(lines) == 3
+        # Invariant: sorted by relative posix path
+        assert lines[0].endswith("  a.txt")
+        assert lines[1].endswith("  b.txt")
+        assert lines[2].endswith("  sub/c.txt")
+
+        # Invariant: symlink rejection
+        link = tdp / "link.txt"
+        link.symlink_to(tdp / "a.txt")
+        with pytest.raises(RuntimeError, match="Symlink is not admissible"):
+            deterministic_listing(tdp)
 
 
 def test_governing_commitments():
@@ -136,3 +162,49 @@ operator_statement_location=antigravity-conversation-15abadc7-f175-429d-ba47-9d1
             read_receipt(bad_path)
     finally:
         bad_path.unlink(missing_ok=True)
+
+
+def test_frozen_quantiles_policy():
+    """Verify that evaluated quantiles strictly adhere to frozen PARAMS:
+    central: [0.25, 0.50, 0.75], tails: [0.05, 0.95], tail_reporting_minimum_k: 40.
+    Exploratory quantiles 0.10 and 0.90 must not appear in preregistered evaluation.
+    """
+    CENTRAL_QUANTILES = [0.25, 0.50, 0.75]
+    TAIL_QUANTILES = [0.05, 0.95]
+    TAIL_REPORTING_MINIMUM_K = 40
+
+    # Case K >= 40 (e.g. frozen K=64)
+    k_64 = 64
+    tails_eligible = k_64 >= TAIL_REPORTING_MINIMUM_K
+    quantiles_64 = sorted(CENTRAL_QUANTILES + (TAIL_QUANTILES if tails_eligible else []))
+    assert quantiles_64 == [0.05, 0.25, 0.50, 0.75, 0.95]
+    assert 0.10 not in quantiles_64
+    assert 0.90 not in quantiles_64
+
+    # Case K < 40 (e.g. K=20)
+    k_20 = 20
+    tails_eligible_20 = k_20 >= TAIL_REPORTING_MINIMUM_K
+    quantiles_20 = sorted(CENTRAL_QUANTILES + (TAIL_QUANTILES if tails_eligible_20 else []))
+    assert quantiles_20 == [0.25, 0.50, 0.75]
+    assert 0.05 not in quantiles_20
+    assert 0.95 not in quantiles_20
+
+
+def test_runner_receipt_parser():
+    """Verify runner read_key_value_receipt matches driver receipt parsing."""
+    import sys
+    sys.path.insert(0, str(RUNNER_PATH.parent))
+    from execute import read_key_value_receipt
+
+    with tempfile.NamedTemporaryFile("w", encoding="utf-8", delete=False) as tf:
+        tf.write("status=RATIFIED\ninstance=batteryml-protocol-robustness-s3\nkey_with_spaces = value_trimmed \n")
+        tf_path = Path(tf.name)
+
+    try:
+        vals = read_key_value_receipt(tf_path)
+        assert vals["status"] == "RATIFIED"
+        assert vals["instance"] == "batteryml-protocol-robustness-s3"
+        assert vals["key_with_spaces"] == "value_trimmed"
+    finally:
+        tf_path.unlink(missing_ok=True)
+

@@ -1068,7 +1068,14 @@ def command_execute_all(args: argparse.Namespace) -> None:
             dummy_relative_changes=dummy_relative_changes,
         )
 
-        quantiles_to_eval = [0.05, 0.10, 0.25, 0.50, 0.75, 0.90, 0.95]
+        CENTRAL_QUANTILES = [0.25, 0.50, 0.75]
+        TAIL_QUANTILES = [0.05, 0.95]
+        TAIL_REPORTING_MINIMUM_K = 40
+
+        k_count = len(split_ranks_eval)
+        tails_eligible = k_count >= TAIL_REPORTING_MINIMUM_K
+        quantiles_to_eval = sorted(CENTRAL_QUANTILES + (TAIL_QUANTILES if tails_eligible else []))
+
         d_rmse_quantiles = {
             m: compute_quantiles_type_7(model_relative_changes[m], quantiles_to_eval)
             for m in RANKING_MODELS
