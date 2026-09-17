@@ -1,5 +1,9 @@
 # BatteryML Protocol Robustness — S3 Multi-Split Sweep
 
+> This repository is a separate post-S2.1 study.  
+> S2.1 is closed and immutable at `dbb142e77901cb5ee245c98af3b42e3d407c32a5`.  
+> S3 is non-blind by design: S2.1 results were known before S3 preregistration.
+
 This repository is the preregistration, sampler specification, and evidence index for `batteryml-protocol-robustness-s3`, a distributional robustness study evaluating BatteryML MATR1 models across an exact-size, minimum-cost, protocol-disjoint split universe.
 
 - **Status**: `DESIGN_V4_FROZEN_CANDIDATE`
@@ -25,15 +29,16 @@ S3 advances from single-point evaluation to a **distributional robustness map**:
 
 ## Core Artifacts & Hashes
 
-| Artifact | Description | SHA-256 |
-| :--- | :--- | :--- |
-| [`PREREGISTRATION.md`](PREREGISTRATION.md) | Governing S3 design document | *Frozen candidate* |
-| [`sampler_input.csv`](sampler_input.csv) | Canonical 4-column primary83 input (83 rows, 7205 B) | `ac672728d9857c417d4f51812f31b20711307f0e7ee20efacf8f38f1b3dfb42e` |
-| [`s3-split-manifest.csv`](s3-split-manifest.csv) | Generated 64-split manifest (5313 lines, 108942 B) | `cf9c269a93053e64ecf9200e0ee704fb0c32d2787f721fc24f0cb711cdc33895` |
-| [`s3-sampler-ranks.json`](s3-sampler-ranks.json) | The 64 unranked sampled ranks | *Derived from seed* |
-| [`session-limit-receipt.json`](session-limit-receipt.json) | Kaggle docs limit receipt & $K=64$ budget derivation | *Recorded* |
-| [`s3_sampler.py`](s3_sampler.py) | Standalone DP sampler, unranker, and invariant verifier | *Deterministic* |
-| [`s3_adjudication.py`](s3_adjudication.py) | Pure adjudication engine and metric calculation | *Deterministic* |
+| Artifact | Description | Bytes / Lines | SHA-256 |
+| :--- | :--- | :--- | :--- |
+| [`PREREGISTRATION.md`](PREREGISTRATION.md) | Governing S3 design document | 415 lines | *Frozen candidate* |
+| [`sampler_input.csv`](sampler_input.csv) | Canonical 4-column primary83 input | 83 rows, 7205 B | `ac672728d9857c417d4f51812f31b20711307f0e7ee20efacf8f38f1b3dfb42e` |
+| [`s3-split-manifest.csv`](s3-split-manifest.csv) | Generated 64-split manifest | 5313 lines, 108942 B | `cf9c269a93053e64ecf9200e0ee704fb0c32d2787f721fc24f0cb711cdc33895` |
+| [`s3-test-membership-commitment.csv`](s3-test-membership-commitment.csv) | Test membership pre-commitment | 64 rows, 16176 B | `53a157ecd49c0a238cd5028c6ab840431a7ecb600b067290ee51645820cb5ada` |
+| [`s3-sampler-ranks.json`](s3-sampler-ranks.json) | The 64 unranked sampled ranks | 64 ranks | *Derived from seed* |
+| [`session-limit-receipt.json`](session-limit-receipt.json) | Kaggle docs limit receipt & $K=64$ derivation | 1643 B | `d3934243cd66f8f2c37606a5afd967cfdddc1fe9ce081472b1e4b68f4acaab78` |
+| [`s3_sampler.py`](s3_sampler.py) | Standalone DP sampler, unranker, & invariant verifier | 321 lines | *Deterministic* |
+| [`s3_adjudication.py`](s3_adjudication.py) | Pure adjudication engine & metric calculation | 200 lines | *Deterministic* |
 
 ---
 

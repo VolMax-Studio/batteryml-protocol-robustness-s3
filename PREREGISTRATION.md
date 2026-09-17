@@ -126,7 +126,20 @@ PARAMS:
     continuity_with_s2_policy_readable_order: false
     seed_text: batteryml-s3-sampler|dbb142e77901cb5ee245c98af3b42e3d407c32a5|96695e534718733469ba108ee3c1372e29351710235d5b47020f6bd9ae2ce722
     seed_sha256: b9b522b9f6a194e7ab3a9eca5c3de0d583336ad773fd17beff419cfb9949c9d1
-    hash_stream: SHA256(seed_bytes || uint64_be(counter))
+    seed_stream_algorithm:
+      seed_digest: SHA256(UTF8(seed_text))
+      block_i: SHA256(seed_digest || uint64_be(i))
+      x: uint256_be(block_i)
+    counter_draws_consumed: 64
+    modulo_bias_rejections: 0
+    duplicate_rank_rejections: 0
+    s2_reference_rank_hits: 0
+    sha256_draw_order_decimal_LF: 1d84b7bf864945a26ec0a5d2feec754b6ed6b4bf50b9f4e5b02bc45720b0ff02
+    sha256_ascending_decimal_LF: 0f2de17c98e615023ef5966630fd93962382c4566c36a43b0d386bd0a8dbfc40
+    test_membership_commitment:
+      schema: draw_index_decimal,rank_decimal,sorted_test_cell_ids_pipe_LF
+      bytes: 16176
+      sha256: 53a157ecd49c0a238cd5028c6ab840431a7ecb600b067290ee51645820cb5ada
     sampling_without_replacement: true
     modulo_bias_rejection: true
     duplicate_rank_rejection: true
@@ -373,6 +386,8 @@ The compute budget formula derives $K$ strictly from the platform session limit:
 | **Pre-run** | Governing hash mismatch | `HASH_MISMATCH` |
 | **Pre-run** | DP count $C(0, 42, 20) \ne 185471$ | `SAMPLER_COUNT_MISMATCH` |
 | **Pre-run** | S2.1 reference rank $\ne 169301$ | `REFERENCE_RANK_MISMATCH` |
+| **Pre-run** | Rank hash mismatch (draw order or ascending) | `RANK_HASH_MISMATCH` |
+| **Pre-run** | Membership commitment hash mismatch | `MEMBERSHIP_COMMITMENT_MISMATCH` |
 | **Pre-run** | Sampler input scope violation | `SAMPLER_INPUT_SCOPE_VIOLATION` |
 | **Pre-run** | Attempt sampler manifest mismatch | `SAMPLER_REGENERATION_MISMATCH` |
 | **Control 1**| Split A divergence $> 1.0\%$ | `HARD_STOP_A_POSITIVE_CONTROL_DIVERGENCE` |

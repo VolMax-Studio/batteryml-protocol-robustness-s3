@@ -57,6 +57,31 @@ class TestS3Sampler(unittest.TestCase):
             self.assertGreaterEqual(r, 0)
             self.assertLess(r, MINIMUM_COST_SPLIT_COUNT)
 
+    def test_precommitment_rank_hashes(self) -> None:
+        import hashlib
+        ranks = self.sampler.generate_ranks()
+        draw_order_text = "".join(f"{r}\n" for _, _, r in ranks)
+        draw_order_sha = hashlib.sha256(draw_order_text.encode("utf-8")).hexdigest()
+        self.assertEqual(draw_order_sha, "1d84b7bf864945a26ec0a5d2feec754b6ed6b4bf50b9f4e5b02bc45720b0ff02")
+
+        ascending_text = "".join(f"{r}\n" for r in sorted([r for _, _, r in ranks]))
+        ascending_sha = hashlib.sha256(ascending_text.encode("utf-8")).hexdigest()
+        self.assertEqual(ascending_sha, "0f2de17c98e615023ef5966630fd93962382c4566c36a43b0d386bd0a8dbfc40")
+
+    def test_precommitment_test_membership_hash(self) -> None:
+        import hashlib
+        ranks = self.sampler.generate_ranks()
+        mem_rows = []
+        for draw_idx, _, r in ranks:
+            asgn = self.sampler.unrank(r)
+            test_cids = sorted([cid for cid, side in asgn.items() if side == "test"], key=lambda x: x.encode("utf-8"))
+            self.assertEqual(len(test_cids), 42)
+            joined = "|".join(test_cids)
+            mem_rows.append(f"{draw_idx},{r},{joined}\n")
+        mem_bytes = "".join(mem_rows).encode("utf-8")
+        self.assertEqual(len(mem_bytes), 16176)
+        self.assertEqual(hashlib.sha256(mem_bytes).hexdigest(), "53a157ecd49c0a238cd5028c6ab840431a7ecb600b067290ee51645820cb5ada")
+
     def test_all_64_split_invariants(self) -> None:
         ranks = self.sampler.generate_ranks()
         for s_idx, _, r in ranks:
