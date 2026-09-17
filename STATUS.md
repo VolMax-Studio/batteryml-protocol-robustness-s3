@@ -6,6 +6,9 @@
 - **Implementation Audit Commit**: `305afe128c9c089b2d4ab62bd5507a57c003f2c8` (CODE-TO-SPEC GATE: PASS)
 - **Preceding Study**: `batteryml-protocol-generalization-s2.1-kaggle` (RATIFIED / CLOSED @ `dbb142e77901cb5ee245c98af3b42e3d407c32a5`)
 - **Scientific Execution Authorized**: `true` (Ratified by Operator [L3] at 2026-09-17T23:33:31+02:00)
+- **Dispatch Timestamp**: `2026-09-17T21:42:28Z` (Attempt 1 on Kaggle CPU)
+- **Attempt Consumption Semantics**: Runner preflight does not consume Attempt 1. Attempt 1 is consumed upon successful preflight and driver process spawn (`driver_process_started: true`).
+
 
 ---
 
