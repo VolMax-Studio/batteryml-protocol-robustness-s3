@@ -1,72 +1,63 @@
 # BatteryML Protocol Robustness — S3 Multi-Split Sweep
 
-> This repository is a separate post-S2.1 study.  
-> S2.1 is closed and immutable at `dbb142e77901cb5ee245c98af3b42e3d407c32a5`.  
-> S3 is non-blind by design: S2.1 results were known before S3 preregistration.
-
-This repository is the preregistration, sampler specification, and evidence index for `batteryml-protocol-robustness-s3`, a distributional robustness study evaluating BatteryML MATR1 models across an exact-size, minimum-cost, protocol-disjoint split universe.
-
-- **Status**: `RATIFIED_CLOSED`
-- **Governing Scientific Verdict**: `MODEL_SPECIFIC` (Ratified by Operator [L3])
-- **Study Paradigm**: Preregistered post-S2.1 multi-split robustness sweep
-- **Execution & Closure Walkthrough**: [`WALKTHROUGH.md`](WALKTHROUGH.md)
-- **Status Ledger**: [`STATUS.md`](STATUS.md)
-- **Preceding Instance**: [`batteryml-protocol-generalization-s2.1-kaggle`](https://github.com/VolMax-Studio/batteryml-protocol-generalization-s2-kaggle) (Head: [`dbb142e`](https://github.com/VolMax-Studio/batteryml-protocol-generalization-s2-kaggle/commit/dbb142e77901cb5ee245c98af3b42e3d407c32a5))
+> **Preregistered Robustness Study on BatteryML MATR1 Benchmark**  
+> **Governing Verdict:** `MODEL_SPECIFIC` (Ratified by Operator [L3])  
+> **Status:** `RATIFIED / CLOSED` | **Scope:** 64 protocol-disjoint partitions · 264 model fits
 
 ---
 
-## Overview & Scientific Purpose
+## Empirical Results & Distributional Maps
 
-S2.1 demonstrated that evaluating models on an exact-size protocol-disjoint split changed benchmark outcomes (+19.6% Ridge RMSE and ranking inversion), but also revealed strong sensitivity to test composition and outlier cell `b2c1`.
+### 1. Relative RMSE Shift Distribution across 64 Partitions
+![Relative RMSE Change Distribution](figures/s3_d_rmse_distribution.png)
 
-S3 advances from single-point evaluation to a **distributional robustness map**:
-- Samples $K=64$ distinct splits uniformly without replacement from the $185,470$ candidate minimum-cost protocol-disjoint partitions.
-- Evaluates 4 models (`dummy`, `variance`, `ridge`, `xgb`) across all partitions ($4 \times (64 + 2) = 264$ fits).
-- Measures the empirical prevalence, direction, and magnitude of metric changes ($D^{RMSE}$, $D^{MAE}$, Skill, residual concentrations).
-- Evaluates the `b2c1` outlier sensitivity axis on identical checkpoints without model refitting.
-- Enforces two separate $1.0\%$ positive control gates before any sampled split is adjudicated:
-  1. **BatteryML Split A baseline gate**: requires reproduction of the published benchmark within $1.0\%$.
-  2. **S2.1 Reference Split B gate**: requires reproduction of the S2.1 reference result within $1.0\%$.
+### 2. Benchmark Ordering Shifts
+![Model Ranking Shifts](figures/s3_ranking_inversion.png)
+
+### 3. Outlier Cell Leverage Index $J(b2c1)$
+![Single-Cell Outlier Leverage](figures/s3_outlier_sensitivity_b2c1.png)
 
 ---
 
-## Core Artifacts & Hashes
+## Adjudication Summary
 
-| Artifact | Description | Bytes / Lines | Status / Reference |
-| :--- | :--- | :--- | :--- |
-| [`WALKTHROUGH.md`](WALKTHROUGH.md) | Execution, verification & closure walkthrough | Complete | `8c6c22c` |
-| [`STATUS.md`](STATUS.md) | Study status ledger & state transitions | Complete | `RATIFIED_CLOSED` |
-| [`PREREGISTRATION.md`](PREREGISTRATION.md) | Governing S3 design document | 458 lines | `0958e89...` (Frozen) |
-| [`receipts/verdict-ratification-receipt.txt`](receipts/verdict-ratification-receipt.txt) | Operator [L3] Verdict Ratification Receipt | 1.8 KB | `RATIFIED_CLOSED` |
-| [`receipts/governing-adjudication.json`](receipts/governing-adjudication.json) | Final Ratified Governing Adjudication Record | 2.7 KB | `36df005f...` |
-| [`receipts/post-run-binding-receipt.json`](receipts/post-run-binding-receipt.json) | Kaggle execution identity & dataset binding receipt | 4.7 KB | `1ad8fdc4...` |
-| [`sampler_input.csv`](sampler_input.csv) | Canonical 4-column primary83 input | 83 rows, 7205 B | `ac672728d9857c417d4f51812f31b20711307f0e7ee20efacf8f38f1b3dfb42e` |
-| [`s3-split-manifest.csv`](s3-split-manifest.csv) | Generated 64-split manifest | 5313 lines, 108942 B | `cf9c269a93053e64ecf9200e0ee704fb0c32d2787f721fc24f0cb711cdc33895` |
-| [`s3-test-membership-commitment.csv`](s3-test-membership-commitment.csv) | Test membership pre-commitment | 64 rows, 16176 B | `53a157ecd49c0a238cd5028c6ab840431a7ecb600b067290ee51645820cb5ada` |
-| [`s3-sampler-ranks.json`](s3-sampler-ranks.json) | The 64 unranked sampled ranks | 64 ranks | `43ae754e...` |
-| [`s3_sampler.py`](s3_sampler.py) | Standalone DP sampler, unranker, & invariant verifier | 321 lines | Deterministic |
-| [`s3_adjudication.py`](s3_adjudication.py) | Pure adjudication engine & metric calculation | 227 lines | Deterministic |
+| Model | Baseline RMSE (Split A) | Median $\Delta\text{RMSE}$ | IQR $\Delta\text{RMSE}$ | $p_{\text{abs}}$ ($\ge 10\%$) | $p_{\text{pos}}$ ($\ge +10\%$) | Material Prevalent |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: |
+| **Ridge** | 115.8 | **+35.8%** | +22.1% to +91.7% | **90.6%** (58/64) | **85.9%** (55/64) | **Yes** |
+| **Variance** | 136.1 | **+6.0%** | +1.1% to +10.6% | 31.3% (20/64) | 29.7% (19/64) | No |
+| **XGBoost** | 333.7 | **+1.6%** | -6.7% to +16.1% | 43.8% (28/64) | 28.1% (18/64) | No |
+| *Dummy* | 398.8 | *+8.9%* | +7.3% to +20.7% | *46.9%* (30/64) | *46.9%* (30/64) | Flag Inactive (<50%) |
+
+- **Benchmark Ordering Change:** 45 of 64 partitions (70.3%) inverted from Split A baseline (`Variance > Ridge > XGBoost`).
+- **Governing Verdict Rule:** Exactly one model (Ridge) crossed the preregistered $\ge 50\%$ material-prevalence threshold $\rightarrow$ `MODEL_SPECIFIC`.
 
 ---
 
-## Verification & Self-Test
+## Core Artifacts & Proof Receipts
 
-Anyone can independently verify the dynamic programming counting, unranking, and invariant satisfaction:
+| Artifact | Purpose | Hash / Status |
+| :--- | :--- | :--- |
+| [`PREREGISTRATION.md`](PREREGISTRATION.md) | Frozen S3 design & statistical decision rules | `0958e89...` |
+| [`receipts/verdict-ratification-receipt.txt`](receipts/verdict-ratification-receipt.txt) | Operator [L3] Verdict Ratification Receipt | `RATIFIED / CLOSED` |
+| [`receipts/governing-adjudication.json`](receipts/governing-adjudication.json) | Full Ratified Adjudication Record | `36df005f...` |
+| [`receipts/post-run-binding-receipt.json`](receipts/post-run-binding-receipt.json) | Execution identity & dataset binding | `1ad8fdc4...` |
+| [`s3-split-manifest.csv`](s3-split-manifest.csv) | Full 64-split partition manifest | `cf9c269a...` |
+| [`WALKTHROUGH.md`](WALKTHROUGH.md) | Audit trail & step-by-step reproduction log | Complete |
+| [`STATUS.md`](STATUS.md) | State ledger & state transitions | Complete |
+
+---
+
+## Independent Verification
 
 ```bash
-# 1. Run standalone sampler verification:
+# 1. Verify exact unranking & DP counts (185,471 partitions):
 python3 s3_sampler.py --sampler-input sampler_input.csv
 
-# 2. Run test suite (sampler invariants & adjudication synthetic fuzzing):
+# 2. Run unit tests & synthetic adjudication fuzzing:
 python3 -m unittest discover -s tests -p "test_*.py"
+
+# 3. Verify complete recomputation of all 264 fits & metrics from per-cell predictions:
+python3 verifiers/verify_s3_recomputation.py
 ```
 
-All 11 automated tests verify:
-- DP table exact count: $C(0, 42, 20) = 185,471$.
-- Derived S2.1 reference rank in S3 canonical order: $169,301$.
-- Exact generation of 64 ranks from seed text hash `b9b522b9...`.
-- Invariant satisfaction across all 64 splits (41 train, 42 test, 0 protocol overlap, cost 20, intersection with A test == 32).
-- Exhaustive coverage of the 4 adjudication categories under synthetic fuzzing.
-
-Code: Microsoft BatteryML, MIT License.  
-Data: MATR / Severson et al. (2019), CC BY 4.0.
+*Code: MIT · Data: CC BY 4.0 · Instance: `batteryml-protocol-robustness-s3`*
