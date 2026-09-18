@@ -6,6 +6,13 @@
 
 ---
 
+## Study Design & Scope
+
+- **Sampling scope:** The minimum-cost protocol-disjoint space contains 185,471 partitions. The preregistered S2.1 reference partition was excluded from S3 random sampling, leaving 185,470 eligible partitions; $K=64$ was sampled uniformly without replacement from that population.
+- **Non-blind design:** S2.1 results were known before the S3 preregistration was frozen; this exposure was explicitly preregistered.
+
+---
+
 ## Empirical Results & Distributional Maps
 
 ### 1. Relative RMSE Shift Distribution across 64 Partitions
@@ -26,10 +33,11 @@
 | **Ridge** | 115.8 | **+35.8%** | +22.1% to +91.7% | **90.6%** (58/64) | **85.9%** (55/64) | **Yes** |
 | **Variance** | 136.1 | **+6.0%** | +1.1% to +10.6% | 31.3% (20/64) | 29.7% (19/64) | No |
 | **XGBoost** | 333.7 | **+1.6%** | -6.7% to +16.1% | 43.8% (28/64) | 28.1% (18/64) | No |
-| *Dummy* | 398.8 | *+8.9%* | +7.3% to +20.7% | *46.9%* (30/64) | *46.9%* (30/64) | Flag Inactive (<50%) |
+| *Dummy* | 398.8 | *+8.9%* | +7.3% to +20.7% | *46.9%* (30/64) | *42.2%* (27/64) | Flag Inactive (<50%) |
 
 - **Benchmark Ordering Change:** 45 of 64 partitions (70.3%) inverted from Split A baseline (`Variance > Ridge > XGBoost`).
 - **Governing Verdict Rule:** Exactly one model (Ridge) crossed the preregistered $\ge 50\%$ material-prevalence threshold $\rightarrow$ `MODEL_SPECIFIC`.
+- **Composition Diagnostic:** Dummy composition flag did not activate ($p_{\text{abs}} = 46.9\% < 50\%$), but dummy RMSE shifted by median $+8.9\%$, so composition effects are not ruled out.
 
 ---
 
