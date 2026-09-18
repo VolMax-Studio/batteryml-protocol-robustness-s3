@@ -2,7 +2,8 @@
 
 > **Preregistered Robustness Study on BatteryML MATR1 Benchmark**  
 > **Governing Verdict:** `MODEL_SPECIFIC` (Ratified by Operator [L3])  
-> **Status:** `RATIFIED / CLOSED` | **Scope:** 64 protocol-disjoint partitions · 264 model fits
+> **Status:** `RATIFIED / CLOSED` | **Scope:** 64 protocol-disjoint partitions · 264 model fits  
+> **DOI:** [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22834252.svg)](https://doi.org/10.5281/zenodo.22834252)
 
 ---
 
@@ -49,6 +50,7 @@
 | [`receipts/verdict-ratification-receipt.txt`](receipts/verdict-ratification-receipt.txt) | Operator [L3] Verdict Ratification Receipt | `RATIFIED / CLOSED` |
 | [`receipts/governing-adjudication.json`](receipts/governing-adjudication.json) | Full Ratified Adjudication Record | `36df005f...` |
 | [`receipts/post-run-binding-receipt.json`](receipts/post-run-binding-receipt.json) | Execution identity & dataset binding | `1ad8fdc4...` |
+| Permanent Zenodo Archive | Immutable DOI dataset & code snapshot | [`10.5281/zenodo.22834252`](https://doi.org/10.5281/zenodo.22834252) |
 | [`s3-split-manifest.csv`](s3-split-manifest.csv) | Full 64-split partition manifest | `cf9c269a...` |
 | [`WALKTHROUGH.md`](WALKTHROUGH.md) | Audit trail & step-by-step reproduction log | Complete |
 | [`STATUS.md`](STATUS.md) | State ledger & state transitions | Complete |
