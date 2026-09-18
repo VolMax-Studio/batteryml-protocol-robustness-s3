@@ -3,10 +3,10 @@
 
 This tool performs post-run closure for study batteryml-protocol-robustness-s3:
 1. Verifies Kaggle API kernel session status and metadata.
-2. Binds and verifies the control dataset content byte-for-byte.
+2. Binds and verifies the published control dataset version archives byte-for-byte.
 3. Collects the complete 264-fit run matrix (Split A, Ref B, 64 sampled splits x 4 models).
-4. Independently recomputes RMSE and MAE from raw per-cell predictions.
-5. Derives the governing adjudication using frozen s3_adjudication logic.
+4. Independently recomputes RMSE and MAE from raw per-cell predictions with float-precision checks.
+5. Derives the governing adjudication using frozen s3_adjudication logic and frozen quantiles [0.05, 0.25, 0.50, 0.75, 0.95].
 6. Writes checkpoint manifest, public evidence manifest, and governing receipts.
 """
 
@@ -17,9 +17,12 @@ import hashlib
 import json
 import math
 import os
+import re
+import stat
 import sys
+import zipfile
 from datetime import datetime, timezone
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 from typing import Any
 
 import pandas as pd
@@ -38,6 +41,11 @@ EXPECTED_KERNEL_ID = 134781615
 EXPECTED_CONTROL_DATASET_SLUG = "volmax1/batteryml-protocol-robustness-s3-controls"
 EXPECTED_CONTROL_LISTING_SHA256 = "9da5f90c5f4962a873bc49403b1f0a8cb1a20607748386120794bf63f8acd26d"
 MODELS = ["variance", "ridge", "xgb", "dummy"]
+VERSION_DIR = re.compile(r"^v([1-9][0-9]*)$")
+
+CENTRAL_QUANTILES = [0.25, 0.50, 0.75]
+TAIL_QUANTILES = [0.05, 0.95]
+TAIL_REPORTING_MINIMUM_K = 40
 
 
 def sha256_bytes(value: bytes) -> str:
@@ -59,8 +67,52 @@ def load_object(path: Path) -> dict[str, Any]:
     return value
 
 
+def canonical_zip_listing(archive: Path) -> tuple[bytes, int]:
+    rows: list[tuple[str, str]] = []
+    with zipfile.ZipFile(archive) as bundle:
+        seen: set[str] = set()
+        for info in bundle.infolist():
+            if info.is_dir():
+                continue
+            relative = PurePosixPath(info.filename).as_posix()
+            # Ignore dataset-metadata.json which Kaggle strips at mount
+            if relative == "dataset-metadata.json":
+                continue
+            if relative.startswith("/") or ".." in PurePosixPath(relative).parts:
+                raise RuntimeError(f"Inadmissible archive path in {archive}: {relative}")
+            mode = (info.external_attr >> 16) & 0o170000
+            if mode == stat.S_IFLNK:
+                raise RuntimeError(f"Symlink is inadmissible in {archive}: {relative}")
+            if relative in seen:
+                raise RuntimeError(f"Duplicate archive path in {archive}: {relative}")
+            seen.add(relative)
+            rows.append((relative, sha256_bytes(bundle.read(info))))
+    if not rows:
+        raise RuntimeError(f"Archive contains no regular files: {archive}")
+    rows.sort(key=lambda row: row[0])
+    listing = "".join(f"{digest}  {relative}\n" for relative, digest in rows).encode()
+    return listing, len(rows)
+
+
+def enumerate_archives(root: Path) -> list[tuple[int, Path]]:
+    candidates: list[tuple[int, Path]] = []
+    for directory in sorted(root.iterdir()):
+        match = VERSION_DIR.fullmatch(directory.name)
+        if not directory.is_dir() or not match:
+            continue
+        archives = sorted(directory.glob("*.zip"))
+        if len(archives) != 1:
+            raise RuntimeError(f"Expected one zip in {directory}, found {len(archives)}")
+        candidates.append((int(match.group(1)), archives[0]))
+    if not candidates:
+        raise RuntimeError(f"No explicit-version archives found under {root}")
+    versions = [version for version, _ in candidates]
+    if versions != list(range(min(versions), max(versions) + 1)):
+        raise RuntimeError(f"Candidate dataset versions are not contiguous: {versions}")
+    return candidates
+
+
 def query_kernel() -> dict[str, Any]:
-    # Ensure token is loaded if present in secret file
     token_path = Path("/home/volmax-studio/Documents/Kljucevi/kaggle.txt")
     if token_path.is_file():
         os.environ["KAGGLE_API_TOKEN"] = token_path.read_text().strip()
@@ -98,31 +150,6 @@ def query_kernel() -> dict[str, Any]:
     if EXPECTED_CONTROL_DATASET_SLUG not in observation["dataset_data_sources"]:
         raise RuntimeError(f"Control dataset {EXPECTED_CONTROL_DATASET_SLUG} not in kernel dataset sources")
     return observation
-
-
-def verify_control_dataset(control_source_dir: Path, runtime_listing_text: str) -> dict[str, Any]:
-    files: list[tuple[str, Path]] = []
-    for p in control_source_dir.rglob("*"):
-        if p.is_file() and p.name != "dataset-metadata.json":
-            rel = p.relative_to(control_source_dir).as_posix()
-            files.append((rel, p))
-    files.sort(key=lambda x: x[0])
-    rows = [f"{sha256_file(p)}  {rel}\n" for rel, p in files]
-    local_listing = "".join(rows)
-    local_hash = sha256_bytes(local_listing.encode())
-    runtime_hash = sha256_bytes(runtime_listing_text.encode())
-
-    if local_hash != runtime_hash:
-        raise RuntimeError(f"Control dataset listing mismatch: local={local_hash} vs runtime={runtime_hash}")
-    if local_hash != EXPECTED_CONTROL_LISTING_SHA256:
-        raise RuntimeError(f"Control dataset listing does not match expected: {local_hash} vs {EXPECTED_CONTROL_LISTING_SHA256}")
-
-    return {
-        "file_count": len(files),
-        "listing_sha256": local_hash,
-        "runtime_byte_match": True,
-        "source_dir": str(control_source_dir),
-    }
 
 
 def parse_artifact_manifest(path: Path) -> dict[str, str]:
@@ -204,6 +231,8 @@ def collect_run_matrix(artifact: Path) -> tuple[list[dict[str, Any]], dict[str, 
         recomp_rmse, recomp_mae, n_test = evaluate_predictions(pred_path)
         if not math.isclose(recomp_rmse, rcpt["rmse"], rel_tol=1e-4, abs_tol=1e-4):
             raise RuntimeError(f"RMSE mismatch in Split A {model}: {recomp_rmse} vs {rcpt['rmse']}")
+        if not math.isclose(recomp_mae, rcpt["mae"], rel_tol=1e-4, abs_tol=1e-4):
+            raise RuntimeError(f"MAE mismatch in Split A {model}: {recomp_mae} vs {rcpt['mae']}")
 
         base_rmses[model] = recomp_rmse
         runs.append({
@@ -244,6 +273,8 @@ def collect_run_matrix(artifact: Path) -> tuple[list[dict[str, Any]], dict[str, 
         recomp_rmse, recomp_mae, n_test = evaluate_predictions(pred_path)
         if not math.isclose(recomp_rmse, rcpt["rmse"], rel_tol=1e-4, abs_tol=1e-4):
             raise RuntimeError(f"RMSE mismatch in Ref B {model}: {recomp_rmse} vs {rcpt['rmse']}")
+        if not math.isclose(recomp_mae, rcpt["mae"], rel_tol=1e-4, abs_tol=1e-4):
+            raise RuntimeError(f"MAE mismatch in Ref B {model}: {recomp_mae} vs {rcpt['mae']}")
 
         ref_rmses[model] = recomp_rmse
         runs.append({
@@ -291,6 +322,8 @@ def collect_run_matrix(artifact: Path) -> tuple[list[dict[str, Any]], dict[str, 
             recomp_rmse, recomp_mae, n_test = evaluate_predictions(pred_path)
             if not math.isclose(recomp_rmse, rcpt["rmse"], rel_tol=1e-4, abs_tol=1e-4):
                 raise RuntimeError(f"RMSE mismatch in {sdir.name} {model}: {recomp_rmse} vs {rcpt['rmse']}")
+            if not math.isclose(recomp_mae, rcpt["mae"], rel_tol=1e-4, abs_tol=1e-4):
+                raise RuntimeError(f"MAE mismatch in {sdir.name} {model}: {recomp_mae} vs {rcpt['mae']}")
 
             s_rmses[model] = recomp_rmse
             runs.append({
@@ -325,14 +358,18 @@ def collect_run_matrix(artifact: Path) -> tuple[list[dict[str, Any]], dict[str, 
 
     adjudication = adjudicate_s3(model_changes, baseline_rank, split_ranks, dummy_changes)
 
-    # Add quantiles and summary details
+    # Preregistered Quantiles: Central [0.25, 0.50, 0.75] + Tails [0.05, 0.95] if K >= 40
+    k_count = len(split_ranks)
+    tails_eligible = k_count >= TAIL_REPORTING_MINIMUM_K
+    quantiles_to_eval = sorted(CENTRAL_QUANTILES + (TAIL_QUANTILES if tails_eligible else []))
+
     quantiles: dict[str, dict[str, float]] = {}
     for m in RANKING_MODELS:
-        qs = compute_quantiles_type_7(model_changes[m], [0.10, 0.25, 0.50, 0.75, 0.90])
-        quantiles[m] = {f"q_{int(k*100):02d}": v for k, v in qs.items()}
+        qs = compute_quantiles_type_7(model_changes[m], quantiles_to_eval)
+        quantiles[m] = {str(k): v for k, v in qs.items()}
 
-    dummy_qs = compute_quantiles_type_7(dummy_changes, [0.10, 0.25, 0.50, 0.75, 0.90])
-    dummy_quantiles = {f"q_{int(k*100):02d}": v for k, v in dummy_qs.items()}
+    dummy_qs = compute_quantiles_type_7(dummy_changes, quantiles_to_eval)
+    dummy_quantiles = {str(k): v for k, v in dummy_qs.items()}
 
     recomputed_summary = {
         "adjudication": adjudication,
@@ -350,7 +387,7 @@ def collect_run_matrix(artifact: Path) -> tuple[list[dict[str, Any]], dict[str, 
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--output-root", type=Path, required=True)
-    parser.add_argument("--control-source-dir", type=Path, required=True)
+    parser.add_argument("--dataset-archives-root", type=Path, default=Path("dataset-archives"))
     parser.add_argument("--receipt", type=Path)
     parser.add_argument("--adjudication-out", type=Path)
     args = parser.parse_args()
@@ -379,11 +416,34 @@ def main() -> None:
         raise RuntimeError("Execution report does not describe a successful scientific run")
 
     runtime_listing = listing_path.read_text()
-    runtime_listing_sha = sha256_bytes(runtime_listing.encode())
+    runtime_listing_bytes = listing_path.read_bytes()
+    runtime_listing_sha = sha256_bytes(runtime_listing_bytes)
     if runtime_listing_sha != report.get("control_dataset_listing_sha256"):
         raise RuntimeError("Runtime listing SHA-256 differs from EXECUTION_REPORT.json")
 
-    control_binding = verify_control_dataset(args.control_source_dir.resolve(), runtime_listing)
+    # Dataset candidate version enumeration & binding (F-1)
+    dataset_archives_root = args.dataset_archives_root.resolve()
+    candidates = enumerate_archives(dataset_archives_root)
+    versions: list[dict[str, Any]] = []
+    matching_versions: list[int] = []
+
+    for version, archive in candidates:
+        listing, file_count = canonical_zip_listing(archive)
+        matches = (listing == runtime_listing_bytes)
+        versions.append({
+            "archive_sha256": sha256_file(archive),
+            "file_count": file_count,
+            "listing_bytes": len(listing),
+            "listing_sha256": sha256_bytes(listing),
+            "runtime_byte_match": matches,
+            "version": version,
+        })
+        if matches:
+            matching_versions.append(version)
+
+    if not matching_versions:
+        raise RuntimeError(f"No explicit dataset version matches runtime listing: candidates={versions}")
+
     artifact_entries = parse_artifact_manifest(artifact_manifest_path)
     checkpoint_manifest = write_checkpoint_manifest(artifact, artifact_entries)
     runs, recomputed_summary = collect_run_matrix(artifact)
@@ -450,10 +510,14 @@ def main() -> None:
         },
         "closure_step_scientific_run_executed": False,
         "control_dataset_binding": {
+            "bound_version": matching_versions[0] if len(matching_versions) == 1 else None,
+            "candidate_versions": versions,
             "configured_slug": EXPECTED_CONTROL_DATASET_SLUG,
-            "runtime_file_count": control_binding["file_count"],
-            "runtime_listing_sha256": runtime_listing_sha,
+            "matching_versions": matching_versions,
             "runtime_byte_match": True,
+            "runtime_file_count": len(runtime_listing.splitlines()),
+            "runtime_listing_bytes": len(runtime_listing_bytes),
+            "runtime_listing_sha256": runtime_listing_sha,
         },
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
         "generator_sha256": sha256_file(Path(__file__).resolve()),
@@ -475,6 +539,8 @@ def main() -> None:
         "receipt_sha256": sha256_file(receipt_path),
         "governing_adjudication": str(adj_out_path),
         "governing_adjudication_sha256": sha256_file(adj_out_path),
+        "bound_dataset_version": matching_versions[0] if len(matching_versions) == 1 else None,
+        "matching_versions": matching_versions,
         "run_matrix_count": len(runs),
     }, indent=2, sort_keys=True))
 

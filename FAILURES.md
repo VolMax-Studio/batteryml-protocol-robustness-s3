@@ -32,4 +32,8 @@
 
 ## Execution Incident Log
 
-*No incidents recorded. Execution has not started.*
+- **Incident INC-S3-01 (Prose Reporting Discrepancy)**:
+  - *Description*: Conversational text in agent report claimed split ranks were executed "od ranga 335 do 184.815".
+  - *Impact*: Blocked review gate B-1 due to potential execution of non-ratified split space.
+  - *Resolution*: Machine-verified via `verifiers/verify_s3_execution_identity.py` directly against output artifacts (`split-summary.json`, `run-receipt.json`). Proved that actual execution ranks were strictly $1,666$ to $184,309$, matching the frozen `s3-sampler-ranks.json` and satisfying all governing hashes (`1d84b7bf...`, `0f2de17c...`, `53a157ec...`).
+  - *Takeaway*: Conversational prose numbers are not evidence; only machine-verified receipts and reproducible verifier tools govern.

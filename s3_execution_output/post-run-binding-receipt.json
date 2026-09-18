@@ -12,39 +12,54 @@
     ],
     "quantiles": {
       "ridge": {
-        "q_10": 0.09475829742147775,
-        "q_25": 0.2208428577301014,
-        "q_50": 0.35831987219742345,
-        "q_75": 0.9169149999353787,
-        "q_90": 1.0289641805618701
+        "0.05": -0.04636320339959146,
+        "0.25": 0.2208428577301014,
+        "0.5": 0.35831987219742345,
+        "0.75": 0.9169149999353787,
+        "0.95": 1.0602431043568137
       },
       "variance": {
-        "q_10": -0.019245403096707858,
-        "q_25": 0.010506845415846084,
-        "q_50": 0.060212045314080434,
-        "q_75": 0.10622776721216157,
-        "q_90": 0.2107125165621789
+        "0.05": -0.040320603946944325,
+        "0.25": 0.010506845415846084,
+        "0.5": 0.060212045314080434,
+        "0.75": 0.10622776721216157,
+        "0.95": 0.2482175457730182
       },
       "xgb": {
-        "q_10": -0.11483287051732394,
-        "q_25": -0.0672874223892538,
-        "q_50": 0.016250746360696636,
-        "q_75": 0.16064978928222484,
-        "q_90": 0.237648597910024
+        "0.05": -0.13240571484737806,
+        "0.25": -0.0672874223892538,
+        "0.5": 0.016250746360696636,
+        "0.75": 0.16064978928222484,
+        "0.95": 0.2472216638033645
       }
     },
     "rank_change_rate": 0.703125
   },
   "closure_step_scientific_run_executed": false,
   "control_dataset_binding": {
+    "bound_version": 1,
+    "candidate_versions": [
+      {
+        "archive_sha256": "3e0f042c2c97eabc43f0a5152fe7f8017697d889dd70ed8ea8e0852b082234be",
+        "file_count": 218,
+        "listing_bytes": 24680,
+        "listing_sha256": "9da5f90c5f4962a873bc49403b1f0a8cb1a20607748386120794bf63f8acd26d",
+        "runtime_byte_match": true,
+        "version": 1
+      }
+    ],
     "configured_slug": "volmax1/batteryml-protocol-robustness-s3-controls",
+    "matching_versions": [
+      1
+    ],
     "runtime_byte_match": true,
     "runtime_file_count": 218,
+    "runtime_listing_bytes": 24680,
     "runtime_listing_sha256": "9da5f90c5f4962a873bc49403b1f0a8cb1a20607748386120794bf63f8acd26d"
   },
-  "generated_at_utc": "2026-09-18T14:54:35.092216+00:00",
-  "generator_sha256": "8b0e420701f8c685a433953ddf7d9b2adee0b547f6c7c7a7a2d0576244530f9d",
-  "governing_adjudication_sha256": "988e933501775b10138fe04d60e54e54e07df756d3c049b3e4247a26d7ece40e",
+  "generated_at_utc": "2026-09-18T15:06:01.145618+00:00",
+  "generator_sha256": "160039d893248d943fb5694dd38f0e81085bd4b00f83dcaede068a79c751edae",
+  "governing_adjudication_sha256": "36df005f7f6a8bfa1b40f28e2f003e0c52e96d6a86aa2a321783cfc190ed286f",
   "governing_hashes": {
     "driver_sha256": "e2d6f83be4139ff99b23be1b61ce0e22b208b5b742c618899761077402e49b36",
     "governing_scientific_commit": "0958e89a0e994ed9923da26e04e1f4bfb956ab7f",
@@ -66,7 +81,7 @@
     "enable_gpu": false,
     "enable_internet": false,
     "kernel_id": 134781615,
-    "last_run_time": "2026-09-15 14:54:34.732000",
+    "last_run_time": "2026-09-15 15:06:00.794000",
     "status": "COMPLETE"
   },
   "output_file_hashes": {
