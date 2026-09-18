@@ -6,8 +6,11 @@
 
 This repository is the preregistration, sampler specification, and evidence index for `batteryml-protocol-robustness-s3`, a distributional robustness study evaluating BatteryML MATR1 models across an exact-size, minimum-cost, protocol-disjoint split universe.
 
-- **Status**: `DESIGN_V4_FROZEN_CANDIDATE`
+- **Status**: `RATIFIED_CLOSED`
+- **Governing Scientific Verdict**: `MODEL_SPECIFIC` (Ratified by Operator [L3])
 - **Study Paradigm**: Preregistered post-S2.1 multi-split robustness sweep
+- **Execution & Closure Walkthrough**: [`WALKTHROUGH.md`](WALKTHROUGH.md)
+- **Status Ledger**: [`STATUS.md`](STATUS.md)
 - **Preceding Instance**: [`batteryml-protocol-generalization-s2.1-kaggle`](https://github.com/VolMax-Studio/batteryml-protocol-generalization-s2-kaggle) (Head: [`dbb142e`](https://github.com/VolMax-Studio/batteryml-protocol-generalization-s2-kaggle/commit/dbb142e77901cb5ee245c98af3b42e3d407c32a5))
 
 ---
@@ -29,17 +32,20 @@ S3 advances from single-point evaluation to a **distributional robustness map**:
 
 ## Core Artifacts & Hashes
 
-| Artifact | Description | Bytes / Lines | SHA-256 |
+| Artifact | Description | Bytes / Lines | Status / Reference |
 | :--- | :--- | :--- | :--- |
-| [`PREREGISTRATION.md`](PREREGISTRATION.md) | Governing S3 design document | 415 lines | *Frozen candidate* |
+| [`WALKTHROUGH.md`](WALKTHROUGH.md) | Execution, verification & closure walkthrough | Complete | `8c6c22c` |
+| [`STATUS.md`](STATUS.md) | Study status ledger & state transitions | Complete | `RATIFIED_CLOSED` |
+| [`PREREGISTRATION.md`](PREREGISTRATION.md) | Governing S3 design document | 458 lines | `0958e89...` (Frozen) |
+| [`receipts/verdict-ratification-receipt.txt`](receipts/verdict-ratification-receipt.txt) | Operator [L3] Verdict Ratification Receipt | 1.8 KB | `RATIFIED_CLOSED` |
+| [`receipts/governing-adjudication.json`](receipts/governing-adjudication.json) | Final Ratified Governing Adjudication Record | 2.7 KB | `36df005f...` |
+| [`receipts/post-run-binding-receipt.json`](receipts/post-run-binding-receipt.json) | Kaggle execution identity & dataset binding receipt | 4.7 KB | `1ad8fdc4...` |
 | [`sampler_input.csv`](sampler_input.csv) | Canonical 4-column primary83 input | 83 rows, 7205 B | `ac672728d9857c417d4f51812f31b20711307f0e7ee20efacf8f38f1b3dfb42e` |
 | [`s3-split-manifest.csv`](s3-split-manifest.csv) | Generated 64-split manifest | 5313 lines, 108942 B | `cf9c269a93053e64ecf9200e0ee704fb0c32d2787f721fc24f0cb711cdc33895` |
 | [`s3-test-membership-commitment.csv`](s3-test-membership-commitment.csv) | Test membership pre-commitment | 64 rows, 16176 B | `53a157ecd49c0a238cd5028c6ab840431a7ecb600b067290ee51645820cb5ada` |
-| [`s3-sampler-ranks.json`](s3-sampler-ranks.json) | The 64 unranked sampled ranks | 64 ranks | *Derived from seed* |
-| [`receipts/session-limit-receipt.json`](receipts/session-limit-receipt.json) | Kaggle docs limit receipt & $K=64$ derivation | 2245 B | *Recorded* |
-| [`receipts/kaggle-notebooks-session-limit-innertext.txt`](receipts/kaggle-notebooks-session-limit-innertext.txt) | Rendered innerText snapshot of Kaggle docs | 37573 chars, 37771 B | `d3934243cd66f8f2c37606a5afd967cfdddc1fe9ce081472b1e4b68f4acaab78` |
-| [`s3_sampler.py`](s3_sampler.py) | Standalone DP sampler, unranker, & invariant verifier | 321 lines | *Deterministic* |
-| [`s3_adjudication.py`](s3_adjudication.py) | Pure adjudication engine & metric calculation | 200 lines | *Deterministic* |
+| [`s3-sampler-ranks.json`](s3-sampler-ranks.json) | The 64 unranked sampled ranks | 64 ranks | `43ae754e...` |
+| [`s3_sampler.py`](s3_sampler.py) | Standalone DP sampler, unranker, & invariant verifier | 321 lines | Deterministic |
+| [`s3_adjudication.py`](s3_adjudication.py) | Pure adjudication engine & metric calculation | 227 lines | Deterministic |
 
 ---
 
