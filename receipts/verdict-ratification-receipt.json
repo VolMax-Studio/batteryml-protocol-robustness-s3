@@ -1,0 +1,14 @@
+{
+  "governing_adjudication_sha256": "36df005f7f6a8bfa1b40f28e2f003e0c52e96d6a86aa2a321783cfc190ed286f",
+  "governing_evidence_commit": "9a0ad9c92fa32130e927eb845feeb2023594191d",
+  "governing_scientific_commit": "0958e89a0e994ed9923da26e04e1f4bfb956ab7f",
+  "implementation_commit": "305afe128c9c089b2d4ab62bd5507a57c003f2c8",
+  "instance": "batteryml-protocol-robustness-s3",
+  "operator": "Ivan Nestorov, Operator / Final Ratifier",
+  "operator_statement_location": "antigravity-conversation-15abadc7-f175-429d-ba47-9d1ff85d1b74",
+  "operator_verbatim_statement": "OPERATOR [L3] S3 VERDICT RATIFICATION | I ratify the governing scientific verdict for batteryml-protocol-robustness-s3 as MODEL_SPECIFIC. | Under the preregistered sample of 64 minimum-cost protocol-disjoint primary83 partitions, Ridge exhibited material positive RMSE change with high prevalence. Variance and XGBoost did not cross the preregistered material-prevalence threshold (p_abs < 0.50). | This result supports a model-specific robustness/generalization sensitivity finding for the pinned BatteryML MATR1 benchmark. It does not establish universal degradation, data leakage, misconduct, a pure causal protocol effect, or direct applicability to field BESS/Battery Passport performance. | The preregistered dummy composition-sensitivity flag was not activated, but composition effects are not ruled out. | I ratify the governing evidence package at Git commit 9a0ad9c and authorize transition of the study from GOVERNING_EXECUTION_COMPLETE_PENDING_RATIFICATION to RATIFIED / CLOSED. | Final public wording remains subject to the final text gate.",
+  "post_run_binding_receipt_sha256": "1ad8fdc4dcddbd28cd5f99e20c67f5babbd80d2e9ec7791b7a11db5d7847de81",
+  "ratified_at": "2026-09-18T17:15:14+02:00",
+  "status": "RATIFIED_CLOSED",
+  "verdict": "MODEL_SPECIFIC"
+}
