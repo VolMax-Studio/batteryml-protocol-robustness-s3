@@ -1,13 +1,14 @@
 # S3 Study Status Ledger
 
 - **Instance**: `batteryml-protocol-robustness-s3`
-- **Current State**: `EXECUTION_ATTEMPT_1_DISPATCHED`
+- **Current State**: `GOVERNING_EXECUTION_COMPLETE`
 - **Governing Frozen Science Commit**: `0958e89a0e994ed9923da26e04e1f4bfb956ab7f` (RATIFIED / IMMUTABLE)
 - **Implementation Audit Commit**: `305afe128c9c089b2d4ab62bd5507a57c003f2c8` (CODE-TO-SPEC GATE: PASS)
 - **Preceding Study**: `batteryml-protocol-generalization-s2.1-kaggle` (RATIFIED / CLOSED @ `dbb142e77901cb5ee245c98af3b42e3d407c32a5`)
 - **Scientific Execution Authorized**: `true` (Ratified by Operator [L3] at 2026-09-17T23:33:31+02:00)
 - **Dispatch Timestamp**: `2026-09-17T21:42:28Z` (Attempt 1 on Kaggle CPU)
-- **Attempt Consumption Semantics**: Runner preflight does not consume Attempt 1. Attempt 1 is consumed upon successful preflight and driver process spawn (`driver_process_started: true`).
+- **Completion Timestamp**: `2026-09-18T04:06:21Z` (Total Duration: 6h 23m 42s)
+- **Final Adjudication**: `MODEL_SPECIFIC` (Confirmed by independent recomputation and ratified post-run binding)
 
 
 ---
@@ -26,6 +27,7 @@
 | 2026-09-17 23:20 | `IMPLEMENTATION_V1_PACKAGED` | Driver, runner, and control dataset assembled. Blindness protection active. All 21 tests pass. Synthetic determinism verified. Premature ratification receipt removed pending operator statement. Submitted for Implementation Code-to-Spec Gate. |
 | 2026-09-17 23:30 | `IMPLEMENTATION_V2_AUDITED` | Code-to-spec blockers resolved: Kaggle owner set to volmax1; receipt uniqueness enforced; deterministic_listing ported to execute.py as post-run binding producer; quantiles aligned to frozen specification (0.05, 0.25, 0.50, 0.75, 0.95 with K>=40 threshold; 0.10 and 0.90 excised); duplicate runner pruned; control dataset manifest recalculated (218 files). 24/24 tests pass. |
 | 2026-09-17 23:35 | `EXECUTION_ATTEMPT_1_DISPATCHED` | Operator [L3] issues verbatim execution authorization statement. Ratification receipt created (receipts/ratification-receipt.txt). Control dataset published to volmax1/batteryml-protocol-robustness-s3-controls (Version 1, 219 files, Manifest SHA 9cab18bd...). Kaggle CPU Kernel pushed to volmax1/batteryml-protocol-robustness-s3-run (Version 1, Kernel ID 134781615). Status: RUNNING. |
+| 2026-09-18 04:06 | `GOVERNING_EXECUTION_COMPLETE` | Kernel v1 finishes with exit code 0 in 6h 23m 42s. Gate 1 (Split A positive control) and Gate 2 (Ref B control) PASS. All 264 fits executed without failure. Output artifacts retrieved, post-run API binding verified, control dataset listing bound byte-for-byte (9da5f90c...), and independent recomputation from raw per-cell predictions confirms candidate adjudication byte-for-byte. Adjudication: MODEL_SPECIFIC (Ridge degraded with p_pos=85.9%, p_abs=90.6%, median shift +35.8%; Variance and XGB robust with p_pos < 30%; rank change rate 70.3%). Study S3 is GOVERNING COMPLETE. |
 
 
 ---

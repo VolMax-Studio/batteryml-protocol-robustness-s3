@@ -1,0 +1,21 @@
+{
+  "attempt_number": 1,
+  "disposition": "GOVERNING_COMPLETE",
+  "end_utc": "2026-09-18T04:06:18.199384+00:00",
+  "exit_code": 0,
+  "generated_receipts": [
+    "execution-closure.json",
+    "gate-1-positive-control-a.json",
+    "gate-2-reference-split-b.json",
+    "adjudication_candidate.json",
+    "completion-receipt.json",
+    "artifact-files.sha256"
+  ],
+  "governing_commit": "0958e89a0e994ed9923da26e04e1f4bfb956ab7f",
+  "governing_driver_sha256": "e2d6f83be4139ff99b23be1b61ce0e22b208b5b742c618899761077402e49b36",
+  "governing_membership_commitment_sha256": "53a157ecd49c0a238cd5028c6ab840431a7ecb600b067290ee51645820cb5ada",
+  "governing_prereg_sha256": "5c39c1a31fd67299f62828f2ab0b48e982f159b74532ae7b29140ff96fce1350",
+  "governing_split_manifest_sha256": "cf9c269a93053e64ecf9200e0ee704fb0c32d2787f721fc24f0cb711cdc33895",
+  "kaggle_kernel_run_id_or_url": "volmax1/batteryml-protocol-robustness-s3-run",
+  "start_utc": "2026-09-17T21:44:02.318727+00:00"
+}

@@ -1,0 +1,106 @@
+{
+  "adjudication": {
+    "adjudication_category": "MODEL_SPECIFIC",
+    "changed_ranks_count": 45,
+    "dummy_p_abs": 0.46875,
+    "flags": {
+      "dummy_composition_sensitive": false,
+      "no_signal": false,
+      "one_model": true,
+      "robust": false,
+      "same_direction_systematic": false,
+      "systematic_rank": false
+    },
+    "k_splits": 64,
+    "material_prevalent_models": [
+      "ridge"
+    ],
+    "model_stats": {
+      "ridge": {
+        "material_prevalent": true,
+        "negative_systematic": false,
+        "p_abs": 0.90625,
+        "p_neg": 0.046875,
+        "p_pos": 0.859375,
+        "positive_systematic": true
+      },
+      "variance": {
+        "material_prevalent": false,
+        "negative_systematic": false,
+        "p_abs": 0.3125,
+        "p_neg": 0.015625,
+        "p_pos": 0.296875,
+        "positive_systematic": false
+      },
+      "xgb": {
+        "material_prevalent": false,
+        "negative_systematic": false,
+        "p_abs": 0.4375,
+        "p_neg": 0.15625,
+        "p_pos": 0.28125,
+        "positive_systematic": false
+      }
+    },
+    "negative_systematic_models": [],
+    "positive_systematic_models": [
+      "ridge"
+    ],
+    "rank_change_rate": 0.703125
+  },
+  "baseline_rank": [
+    "ridge",
+    "variance",
+    "xgb"
+  ],
+  "baseline_rmses": {
+    "dummy": 398.822842861637,
+    "ridge": 115.78918204213628,
+    "variance": 136.12961754105754,
+    "xgb": 333.6645729777063
+  },
+  "d_rmse_quantiles": {
+    "ridge": {
+      "q_10": 0.09475829742147775,
+      "q_25": 0.2208428577301014,
+      "q_50": 0.35831987219742345,
+      "q_75": 0.9169149999353787,
+      "q_90": 1.0289641805618701
+    },
+    "variance": {
+      "q_10": -0.019245403096707858,
+      "q_25": 0.010506845415846084,
+      "q_50": 0.060212045314080434,
+      "q_75": 0.10622776721216157,
+      "q_90": 0.2107125165621789
+    },
+    "xgb": {
+      "q_10": -0.11483287051732394,
+      "q_25": -0.0672874223892538,
+      "q_50": 0.016250746360696636,
+      "q_75": 0.16064978928222484,
+      "q_90": 0.237648597910024
+    }
+  },
+  "dummy_d_quantiles": {
+    "q_10": 0.05902134641305113,
+    "q_25": 0.07253739071771166,
+    "q_50": 0.08943224758470175,
+    "q_75": 0.2071269126025756,
+    "q_90": 0.22507881938345553
+  },
+  "governing_commit": "0958e89a0e994ed9923da26e04e1f4bfb956ab7f",
+  "instance": "batteryml-protocol-robustness-s3",
+  "ref_b_rank": [
+    "variance",
+    "ridge",
+    "xgb"
+  ],
+  "ref_b_rmses": {
+    "dummy": 426.1157275371521,
+    "ridge": 138.50330279420845,
+    "variance": 133.4759329881114,
+    "xgb": 345.9460560313514
+  },
+  "status": "GOVERNING_RATIFIED_ADJUDICATION",
+  "timestamp_utc": "2026-09-18T14:54:35.091683+00:00"
+}

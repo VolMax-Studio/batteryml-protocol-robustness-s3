@@ -1,0 +1,11 @@
+{
+  "b2c1_influence_j": -0.006021992458707609,
+  "cell_id": "b2c1",
+  "checkpoint_byte_identity_verified": true,
+  "mae_lifted_43": 117.86339054551236,
+  "mae_primary": 118.13961029052734,
+  "prediction": 254.2617950439453,
+  "rmse_lifted_43": 151.87282031064245,
+  "rmse_primary": 152.79293823242188,
+  "target": 148.00001525878906
+}

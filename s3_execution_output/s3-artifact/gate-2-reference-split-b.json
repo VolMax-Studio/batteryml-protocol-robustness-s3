@@ -1,0 +1,26 @@
+{
+  "divergences": {
+    "ridge": {
+      "observed_rmse": 138.50330279420845,
+      "passed": true,
+      "reference_rmse": 138.50330213051572,
+      "relative_diff": 4.791891029212562e-09
+    },
+    "variance": {
+      "observed_rmse": 133.47593688964844,
+      "passed": true,
+      "reference_rmse": 133.47593688964844,
+      "relative_diff": 0.0
+    },
+    "xgb": {
+      "observed_rmse": 345.946044921875,
+      "passed": true,
+      "reference_rmse": 345.9460754394531,
+      "relative_diff": 8.821484124724847e-08
+    }
+  },
+  "gate": "GATE_2_REFERENCE_SPLIT_B_CONTROL",
+  "relative_tolerance": 0.01,
+  "status": "PASS",
+  "timestamp_utc": "2026-09-17T22:03:48.086324+00:00"
+}

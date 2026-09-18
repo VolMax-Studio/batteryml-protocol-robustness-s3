@@ -1,0 +1,89 @@
+{
+  "adjudication_summary": {
+    "adjudication_category": "MODEL_SPECIFIC",
+    "attempt": 1,
+    "changed_ranks_count": 45,
+    "disposition": "GOVERNING_COMPLETE",
+    "material_prevalent_models": [
+      "ridge"
+    ],
+    "positive_systematic_models": [
+      "ridge"
+    ],
+    "quantiles": {
+      "ridge": {
+        "q_10": 0.09475829742147775,
+        "q_25": 0.2208428577301014,
+        "q_50": 0.35831987219742345,
+        "q_75": 0.9169149999353787,
+        "q_90": 1.0289641805618701
+      },
+      "variance": {
+        "q_10": -0.019245403096707858,
+        "q_25": 0.010506845415846084,
+        "q_50": 0.060212045314080434,
+        "q_75": 0.10622776721216157,
+        "q_90": 0.2107125165621789
+      },
+      "xgb": {
+        "q_10": -0.11483287051732394,
+        "q_25": -0.0672874223892538,
+        "q_50": 0.016250746360696636,
+        "q_75": 0.16064978928222484,
+        "q_90": 0.237648597910024
+      }
+    },
+    "rank_change_rate": 0.703125
+  },
+  "closure_step_scientific_run_executed": false,
+  "control_dataset_binding": {
+    "configured_slug": "volmax1/batteryml-protocol-robustness-s3-controls",
+    "runtime_byte_match": true,
+    "runtime_file_count": 218,
+    "runtime_listing_sha256": "9da5f90c5f4962a873bc49403b1f0a8cb1a20607748386120794bf63f8acd26d"
+  },
+  "generated_at_utc": "2026-09-18T14:54:35.092216+00:00",
+  "generator_sha256": "8b0e420701f8c685a433953ddf7d9b2adee0b547f6c7c7a7a2d0576244530f9d",
+  "governing_adjudication_sha256": "988e933501775b10138fe04d60e54e54e07df756d3c049b3e4247a26d7ece40e",
+  "governing_hashes": {
+    "driver_sha256": "e2d6f83be4139ff99b23be1b61ce0e22b208b5b742c618899761077402e49b36",
+    "governing_scientific_commit": "0958e89a0e994ed9923da26e04e1f4bfb956ab7f",
+    "implementation_commit": "305afe128c9c089b2d4ab62bd5507a57c003f2c8",
+    "membership_commitment_sha256": "53a157ecd49c0a238cd5028c6ab840431a7ecb600b067290ee51645820cb5ada",
+    "preregistration_sha256": "5c39c1a31fd67299f62828f2ab0b48e982f159b74532ae7b29140ff96fce1350",
+    "ratification_receipt_sha256": "84801d39281f71a619a28921485db9de2d28b6f59b2bfb758e97b16e48755f1f",
+    "runner_sha256": "0ad551152d8fa86b1052052a2fe0ab624ae2cb3cace9f114ddf6b440738cbbcd",
+    "split_manifest_sha256": "cf9c269a93053e64ecf9200e0ee704fb0c32d2787f721fc24f0cb711cdc33895"
+  },
+  "kernel_binding": {
+    "configured_ref": "volmax1/batteryml-protocol-robustness-s3-run",
+    "current_version_number": 1,
+    "dataset_data_sources": [
+      "rickandjoe/mit-battery-degradation-dataset",
+      "volmax1/batteryml-protocol-robustness-s3-controls"
+    ],
+    "docker_image": "gcr.io/kaggle-images/python@sha256:dafd4ce5668bbf1ad422e4c109e0f18c9623c3a7c7f48b0235f13142755c40b9",
+    "enable_gpu": false,
+    "enable_internet": false,
+    "kernel_id": 134781615,
+    "last_run_time": "2026-09-15 14:54:34.732000",
+    "status": "COMPLETE"
+  },
+  "output_file_hashes": {
+    "artifact_manifest_sha256": "6866bee0c0e21411f2f77ab3873529bd7a2c8418974d60ebe00bf0eb10da64fd",
+    "attempt_ledger_sha256": "04fa4c19bd30e7e60d9643b1af115cc915e554c6d573795669481e490a569104",
+    "candidate_adjudication_sha256": "a646c4915c5a6f969175797b87dcbad0945ba88288f6b35fccd5d0b47e203d7e",
+    "checkpoint_manifest_sha256": "e299b7fbb57d77320578b6a5e69a9ceaacc565cb5b1f468e6bd9fe8e81d18c23",
+    "completion_receipt_sha256": "71d6c8154c46e9c8f6ca79e9b3a614f6d434ab53c0c42ec38310fc961b1dc4ac",
+    "control_dataset_files_listing_sha256": "9da5f90c5f4962a873bc49403b1f0a8cb1a20607748386120794bf63f8acd26d",
+    "execution_closure_sha256": "a341e143bb5f6e7f0e07db7485bfbbf92e09cb84cae52539bb3a7c1cb8c8c0a8",
+    "execution_report_sha256": "095ccb5d39ba51e5a8a38d966b341a328e2d375eeaf3415dd9f88ef91c8c1fd9",
+    "gate_1_receipt_sha256": "5b5cd2d88248b04f0fec52ce9a8b7807b84fec4bc3ab6192011e95b6ca69bf8b",
+    "gate_2_receipt_sha256": "e2be8d7b1ae8c1b439c0ce6b0f99493e8c2d95b5a8ea823d5ce0e03fd4a136a9",
+    "public_evidence_manifest_sha256": "04f207177c8f9cc443b739af6958b2aeac1cf571d4c49ad042803f258037cb7b"
+  },
+  "run_matrix_count": 264,
+  "scientific_run_executed_in_bound_attempt": true,
+  "status": "POST_RUN_BINDING_COMPLETE_GENERATED",
+  "study_instance": "batteryml-protocol-robustness-s3"
+}

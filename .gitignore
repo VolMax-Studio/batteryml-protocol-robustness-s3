@@ -1,3 +1,7 @@
 __pycache__/
 *.pyc
 .pytest_cache/
+*.ckpt
+s3_execution_output/s3-processed-matr/
+s3_execution_output/s3-site-packages/
+s3_execution_output/*.log

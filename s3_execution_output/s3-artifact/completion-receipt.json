@@ -1,0 +1,9 @@
+{
+  "artifact_manifest_sha256": "6866bee0c0e21411f2f77ab3873529bd7a2c8418974d60ebe00bf0eb10da64fd",
+  "attempt": 1,
+  "candidate_adjudication": "MODEL_SPECIFIC",
+  "instance": "batteryml-protocol-robustness-s3",
+  "status": "COMPLETE",
+  "timestamp_utc": "2026-09-18T04:06:18.198855+00:00",
+  "total_files": 1389
+}
