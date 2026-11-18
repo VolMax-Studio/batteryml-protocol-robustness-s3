@@ -36,7 +36,7 @@
 | **XGBoost** | 333.7 | **+1.6%** | -6.7% to +16.1% | 43.8% (28/64) | 28.1% (18/64) | No |
 | *Dummy* | 398.8 | *+8.9%* | +7.3% to +20.7% | *46.9%* (30/64) | *42.2%* (27/64) | Flag Inactive (<50%) |
 
-- **Benchmark Ordering Change:** 45 of 64 partitions (70.3%) inverted from Split A baseline (`Variance > Ridge > XGBoost`).
+- **Benchmark Ordering Change:** 45 of 64 partitions (70.3%) inverted from Split A baseline (`Ridge > Variance > XGBoost`).
 - **Governing Verdict Rule:** Exactly one model (Ridge) crossed the preregistered $\ge 50\%$ material-prevalence threshold $\rightarrow$ `MODEL_SPECIFIC`.
 - **Composition Diagnostic:** Dummy composition flag did not activate ($p_{\text{abs}} = 46.9\% < 50\%$), but dummy RMSE shifted by median $+8.9\%$, so composition effects are not ruled out.
 
